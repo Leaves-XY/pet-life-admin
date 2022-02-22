@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <!--日志文件所在目录，如果是tomcat，如下写法日志文件会在则为${TOMCAT_HOME}/bin/logs/目录下-->
-    <property name="LOG_HOME_WINDOWS" value="logs"/>
-    <property name="LOG_HOME_LINUX" value="./logs"/>
+    <!-- 日志存放路径 -->
+	<property name="log.path" value="/home/pet-life-ui/logs" />
     <!-- 日志输出格式 -->
 	<property name="log.pattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n" />
 
