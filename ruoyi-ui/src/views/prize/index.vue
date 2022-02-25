@@ -158,6 +158,9 @@
         <el-form-item label="正确答案" prop="answer">
           <el-input v-model="form.answer" placeholder="请输入正确答案" />
         </el-form-item>
+        <el-form-item label="题目类别" prop="type">
+          <el-input v-model="form.type" placeholder="请输入题目类别" />
+        </el-form-item>
         <el-form-item label="是否删除" prop="isDeleted">
           <el-select v-model="form.isDeleted" placeholder="请选择是否删除">
             <el-option
