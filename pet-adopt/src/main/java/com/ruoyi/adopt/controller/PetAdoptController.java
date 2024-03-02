@@ -101,4 +101,22 @@ public class PetAdoptController extends BaseController
     {
         return toAjax(petAdoptService.deletePetAdoptByIds(ids));
     }
+
+    /**
+     * 领养情况统计
+     * @return vo
+     */
+    @GetMapping(value = "/statistics")
+    public AjaxResult statistics() {
+        return AjaxResult.success(petAdoptService.adoptStatistics());
+    }
+
+    /**
+     * 宠物信息发布按天统计
+     * @return vo
+     */
+    @GetMapping(value = "/petReleaseStatisticsForDate")
+    public AjaxResult petReleaseStatisticsForDate() {
+        return AjaxResult.success(petAdoptService.petReleaseStatisticsForDate());
+    }
 }

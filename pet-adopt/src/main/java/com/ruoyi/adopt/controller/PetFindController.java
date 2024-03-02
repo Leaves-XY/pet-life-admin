@@ -101,4 +101,13 @@ public class PetFindController extends BaseController
     {
         return toAjax(petFindService.deletePetFindByIds(ids));
     }
+
+    /**
+     * 统计
+     * @return vo
+     */
+    @GetMapping(value = "/statistics")
+    public AjaxResult statistics() {
+        return AjaxResult.success(petFindService.statistics());
+    }
 }

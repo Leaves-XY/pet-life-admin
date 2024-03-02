@@ -2,6 +2,8 @@ package com.ruoyi.adopt.mapper;
 
 import java.util.List;
 import com.ruoyi.adopt.domain.PetFind;
+import com.ruoyi.adopt.domain.vo.AdoptStatisticsVo;
+import com.ruoyi.adopt.domain.vo.StatisticsVo;
 
 /**
  * 寻宠Mapper接口
@@ -58,4 +60,13 @@ public interface PetFindMapper
      * @return 结果
      */
     public int deletePetFindByIds(Long[] ids);
+
+    /**
+     * 统计
+     * @return vo
+     */
+    List<AdoptStatisticsVo> statistics();
+
+    List<StatisticsVo> queryFindForDate();
+
 }

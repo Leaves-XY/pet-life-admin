@@ -2,6 +2,7 @@ package com.ruoyi.adopt.service;
 
 import java.util.List;
 import com.ruoyi.adopt.domain.PetFind;
+import com.ruoyi.adopt.domain.vo.AdoptStatisticsVo;
 
 /**
  * 寻宠Service接口
@@ -58,4 +59,10 @@ public interface IPetFindService
      * @return 结果
      */
     public int deletePetFindById(Long id);
+
+    /**
+     * 统计
+     * @return vo
+     */
+    List<AdoptStatisticsVo> statistics();
 }

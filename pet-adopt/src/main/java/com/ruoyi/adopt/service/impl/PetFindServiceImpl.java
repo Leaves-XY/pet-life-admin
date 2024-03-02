@@ -2,6 +2,7 @@ package com.ruoyi.adopt.service.impl;
 
 import java.util.List;
 
+import com.ruoyi.adopt.domain.vo.AdoptStatisticsVo;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
@@ -101,5 +102,11 @@ public class PetFindServiceImpl implements IPetFindService
     public int deletePetFindById(Long id)
     {
         return petFindMapper.deletePetFindById(id);
+    }
+
+    @DataSource(value = DataSourceType.SLAVE)
+    @Override
+    public List<AdoptStatisticsVo> statistics() {
+        return petFindMapper.statistics();
     }
 }

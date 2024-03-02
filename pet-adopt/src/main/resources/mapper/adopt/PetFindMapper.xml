@@ -135,4 +135,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="statistics" resultType="com.ruoyi.adopt.domain.vo.AdoptStatisticsVo">
+        select
+            (case when is_finish = '0' then '已完成' else '进行中' end) as `name`,
+            count(is_finish) as total,
+            round(count(is_finish) / (select count(*) from pet_find where is_deleted = 0) * 100, 2) as rate
+        from pet_find
+        where is_deleted = 0
+        group by is_finish
+    </select>
+
+    <select id="queryFindForDate" resultType="com.ruoyi.adopt.domain.vo.StatisticsVo">
+        select * from (
+            select
+            date_format(create_time, '%Y-%m-%d') as `dateTime`,
+            count(*) as 发布寻宠
+            from pet_find
+            where is_deleted = 0
+            group by `dateTime`
+            order by `dateTime` desc
+        ) a
+        where `dateTime` between (select date_format(date_sub(now(), INTERVAL 30 DAY), '%Y-%m-%d')) and (select date_format(now(), '%Y-%m-%d'))
+    </select>
+
 </mapper>

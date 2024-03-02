@@ -1,7 +1,12 @@
 package com.ruoyi.adopt.service.impl;
 
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
+import com.ruoyi.adopt.domain.vo.AdoptStatisticsVo;
+import com.ruoyi.adopt.domain.vo.StatisticsVo;
+import com.ruoyi.adopt.mapper.PetFindMapper;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
@@ -10,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.adopt.mapper.PetAdoptMapper;
 import com.ruoyi.adopt.domain.PetAdopt;
 import com.ruoyi.adopt.service.IPetAdoptService;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 宠物领养Service业务层处理
@@ -22,6 +28,9 @@ public class PetAdoptServiceImpl implements IPetAdoptService
 {
     @Autowired
     private PetAdoptMapper petAdoptMapper;
+
+    @Autowired
+    private PetFindMapper petFindMapper;
 
     /**
      * 查询宠物领养
@@ -101,5 +110,45 @@ public class PetAdoptServiceImpl implements IPetAdoptService
     public int deletePetAdoptById(Integer id)
     {
         return petAdoptMapper.deletePetAdoptById(id);
+    }
+
+    @DataSource(value = DataSourceType.SLAVE)
+    @Override
+    public List<AdoptStatisticsVo> adoptStatistics() {
+        return petAdoptMapper.adoptStatistics();
+    }
+
+    @DataSource(value = DataSourceType.SLAVE)
+    @Override
+    public List<StatisticsVo> petReleaseStatisticsForDate() {
+        List<StatisticsVo> adoptVos = petAdoptMapper.queryAdoptForDate();
+        List<StatisticsVo> findVos = petFindMapper.queryFindForDate();
+        List<StatisticsVo> resVos = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(adoptVos)) {
+            resVos.addAll(adoptVos);
+        }
+        if (!CollectionUtils.isEmpty(findVos)) {
+            resVos.addAll(findVos);
+        }
+        List<StatisticsVo> vos = new ArrayList<>();
+        Map<String, List<StatisticsVo>> collect = resVos.stream().collect(Collectors.groupingBy(StatisticsVo::getDateTime));
+        collect.forEach((key, value) -> {
+            System.out.println("key: " + key + ", value: " + value);
+            List<StatisticsVo> list = new ArrayList<>();
+            StatisticsVo statisticsVo = new StatisticsVo();
+            AtomicReference<Integer> total1 = new AtomicReference<>(0);
+            AtomicReference<Integer> total2 = new AtomicReference<>(0);
+            value.forEach(e -> {
+                total1.set(e.get发布领养() + total1.get());
+                total2.set(e.get发布寻宠() + total2.get());
+            });
+            statisticsVo.setDateTime(key);
+            statisticsVo.set发布领养(total1.get());
+            statisticsVo.set发布寻宠(total2.get());
+            list.add(statisticsVo);
+            vos.addAll(list);
+        });
+        vos.sort(Comparator.comparing(StatisticsVo::getDateTime));
+        return vos;
     }
 }
